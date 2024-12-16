@@ -3,231 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comment Popup Demo</title>
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="profile_styles.css">
     <style>
-        /* General Styling */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f3f4f6;
-            color: #333;
-        }
+     /* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f4;
+    color: #333;
+}
 
-        .posts-container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 10px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+/* Overlay Styles */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 999;
+}
 
-        .post {
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
+.overlay.active {
+    display: block;
+}
 
-        .post:last-child {
-            border-bottom: none;
-        }
+/* Profile Popup Styles */
+.profile-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px; /* Increased width for better visibility */
+    max-height: 80%; /* Limit height to avoid overflow */
+    overflow-y: auto; /* Enable scrolling if content exceeds height */
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: none;
+    z-index: 3000;
+}
 
-        .comment-btn {
-            background: #dc4734;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+.profile-popup.active {
+    display: block;
+}
 
-        .comment-btn:hover {
-            background: #000102;
-        }
+.popup-header {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 10;
+}
 
-        /* Background Overlay */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            z-index: 999;
-        }
+.popup-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
 
-        .overlay.active {
-            display: block;
-        }
+.popup-header .close-popup {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
 
-        /* Popup Styling */
-        .comment-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            width: 90%;
-            max-width: 500px;
-            background: #fff;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            overflow: hidden;
-            z-index: 1000;
-            display: none;
-            flex-direction: column;
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
+.popup-body {
+    padding: 20px;
+}
 
-        .comment-popup.active {
-            display: flex;
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
 
-        .popup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: #7d7d7d;
-            color: rgb(0, 0, 0);
-        }
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
 
-        .post-preview {
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 
-        .comments-list {
-            padding: 15px;
-        }
+.form-group textarea {
+    resize: none;
+    height: 80px;
+}
 
-        .comment {
-            padding: 10px;
-            margin-bottom: 10px;
-            background: #f9f9f9;
-            border-radius: 5px;
-        }
+.form-actions {
+    text-align: right;
+}
 
-        .close-popup {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
+.save-btn {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #0056b3;
+}
+
+/* Profile Section */
+.profile-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.profile-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.profile-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.edit-profile-btn {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.edit-profile-btn:hover {
+    background: #0056b3;
+}
+
+/* Hide popup by default */
+.profile-popup {
+    display: none;
+}
+
+/* Show popup when active */
+.profile-popup.active {
+    display: block;
+}
+
+
     </style>
 </head>
 <body>
-
-<div class="posts-container">
-    <!-- Post Item -->
-    <div class="post" id="post-1">
-        <h3 class="post-title">This is a post title</h3>
-        <p class="post-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-        <button class="comment-btn" data-post-id="1">💬 Comment</button>
+    <div class="profile-container">
+        <h3 class="profile-title">Your Profile</h3>
+        <p class="profile-description">Manage your personal information.</p>
+        <button class="edit-profile-btn">Edit Profile</button>
     </div>
 
-    <!-- More Posts -->
-    <div class="post" id="post-2">
-        <h3 class="post-title">Another interesting post</h3>
-        <p class="post-content">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...</p>
-        <button class="comment-btn" data-post-id="2">💬 Comment</button>
+    <!-- Background Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Edit Profile Popup -->
+    <div class="profile-popup" id="profile-popup">
+        <div class="popup-header">
+            <h3>Edit Your Profile</h3>
+            <button class="close-popup" id="close-popup">✖</button>
+        </div>
+        <div class="popup-body">
+            <form id="edit-profile-form">
+                <!-- Avatar -->
+                <div class="form-group">
+                    <label for="avatar">Avatar</label>
+                    <input type="file" id="avatar" name="avatar" disabled>
+                    <span class="edit-icon" data-field="avatar">Edit✏️</span>
+                </div>
+
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" value="John Doe" disabled>
+                    <span class="edit-icon" data-field="name">Edit✏️</span>
+                </div>
+
+                <!-- Bio -->
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" name="bio" disabled>Lorem ipsum dolor sit amet...</textarea>
+                    <span class="edit-icon" data-field="bio">Edit✏️</span>
+                </div>
+
+                <!-- Job -->
+                <div class="form-group">
+                    <label for="job">Job</label>
+                    <input type="text" id="job" name="job" value="Software Engineer" disabled>
+                    <span class="edit-icon" data-field="job">Edit✏️</span>
+                </div>
+
+                <!-- Location -->
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" value="New York, USA" disabled>
+                    <span class="edit-icon" data-field="location">Edit✏️</span>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="button" class="save-btn" id="save-profile">Save All</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<!-- Background Overlay -->
-<div class="overlay" id="overlay"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const editProfileBtn = document.querySelector(".edit-profile-btn");
+    const popup = document.getElementById("profile-popup");
+    const overlay = document.getElementById("overlay");
+    const closePopup = document.getElementById("close-popup");
+    const editIcons = document.querySelectorAll(".edit-icon");
+    const saveProfileBtn = document.getElementById("save-profile");
 
-<!-- Comment Popup -->
-<div class="comment-popup" id="comment-popup">
-    <div class="popup-header">
-        <h3>Post & Comments</h3>
-        <button class="close-popup" id="close-popup">✖</button>
-    </div>
-    <div class="post-preview">
-        <!-- Post content will be injected here -->
-    </div>
-    <div class="comments-list">
-        <!-- Comments will be injected here -->
-    </div>
-</div>
+    // Mở popup
+    editProfileBtn.addEventListener("click", () => {
+        overlay.classList.add("active");
+        popup.classList.add("active");
+    });
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const commentBtns = document.querySelectorAll(".comment-btn");
-        const popup = document.getElementById("comment-popup");
-        const overlay = document.getElementById("overlay");
-        const closePopup = document.getElementById("close-popup");
-        const postPreview = document.querySelector(".post-preview");
-        const commentsList = document.querySelector(".comments-list");
+    // Đóng popup khi nhấn vào overlay hoặc nút đóng
+    const closePopupFunction = () => {
+        overlay.classList.remove("active");
+        popup.classList.remove("active");
+    };
 
-        const mockComments = {
-            1: [
-                { id: 1, content: "Great post! Very insightful." },
-                { id: 2, content: "I totally agree with this!" },
-            ],
-            2: [
-                { id: 3, content: "This is amazing, thank you for sharing." },
-                { id: 4, content: "Looking forward to more posts like this." },
-            ],
-        };
+    closePopup.addEventListener("click", closePopupFunction);
+    overlay.addEventListener("click", closePopupFunction);
 
-        // Function to open popup with content
-        function openPopup(postId) {
-            // Clear previous content
-            postPreview.innerHTML = "";
-            commentsList.innerHTML = "";
+    // Xử lý chỉnh sửa thông tin từng trường
+    editIcons.forEach(icon => {
+        icon.addEventListener("click", (event) => {
+            const fieldId = event.target.dataset.field;
+            const field = document.getElementById(fieldId);
 
-            // Find the post content
-            const post = document.getElementById(`post-${postId}`);
-            const postTitle = post.querySelector(".post-title").textContent;
-            const postContent = post.querySelector(".post-content").textContent;
+            if (field.disabled) {
+                field.disabled = false;  // Cho phép chỉnh sửa trường
+                field.focus();
+                icon.textContent = "Save💾";  // Thay đổi biểu tượng thành "Save"
 
-            // Inject post content into popup
-            postPreview.innerHTML = `
-                <h3>${postTitle}</h3>
-                <p>${postContent}</p>
-            `;
-
-            // Inject comments into popup
-            const comments = mockComments[postId] || [];
-            comments.forEach((comment) => {
-                const commentItem = document.createElement("div");
-                commentItem.classList.add("comment");
-                commentItem.textContent = comment.content;
-                commentsList.appendChild(commentItem);
-            });
-
-            // Show overlay and popup
-            overlay.classList.add("active");
-            popup.classList.add("active");
-        }
-
-        // Event listeners for comment buttons
-        commentBtns.forEach((btn) => {
-            btn.addEventListener("click", function () {
-                const postId = btn.dataset.postId;
-                openPopup(postId);
-            });
-        });
-
-        // Event listener for closing popup
-        closePopup.addEventListener("click", function () {
-            popup.classList.remove("active");
-            overlay.classList.remove("active");
-        });
-
-        // Close popup if overlay is clicked
-        overlay.addEventListener("click", function () {
-            popup.classList.remove("active");
-            overlay.classList.remove("active");
+                // Lưu thay đổi khi nhấn "Save"
+                icon.addEventListener("click", () => {
+                    field.disabled = true;  // Không cho phép chỉnh sửa nữa
+                    icon.textContent = "Edit✏️";  // Quay lại biểu tượng "Edit"
+                    saveChanges(fieldId, field.value);  // Lưu thay đổi
+                }, { once: true });
+            }
         });
     });
-</script>
 
+    // Lưu tất cả thay đổi (ví dụ: in ra console)
+    saveProfileBtn.addEventListener("click", () => {
+        const formData = new FormData(document.getElementById("edit-profile-form"));
+        console.log("Profile Data Saved:");
+        formData.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+        });
+        closePopupFunction();  // Đóng popup sau khi lưu
+    });
+
+    // Hàm để xử lý lưu thay đổi của từng trường
+    function saveChanges(fieldId, value) {
+        console.log(`Updated ${fieldId}: ${value}`);  // In ra thông tin thay đổi
+        // Thực hiện lưu dữ liệu tại đây (ví dụ: gửi AJAX hoặc lưu vào cơ sở dữ liệu)
+    }
+});
+
+    </script>
 </body>
 </html>

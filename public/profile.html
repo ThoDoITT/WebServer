@@ -463,7 +463,7 @@
     <main>
 
         <div class="main-wrapper">
-            <div class="profile-banner-large bg-img" data-bg="assets/images/banner/profile-banner.jpg">
+            <div class="profile-banner-large bg-img" id="bgr-image" data-bg="assets/images/logo/BlackCat.jpg">
             </div>
             <div class="profile-menu-area bg-white">
                 <div class="container">
@@ -472,7 +472,7 @@
                             <div class="profile-picture-box">
                                 <figure class="profile-picture">
                                     <a href="profile.html">
-                                        <img src="assets/images/profile/profile-1.jpg" alt="profile picture">
+                                        <img src="assets/images/profile/profile-1.jpg" id="avt-image" alt="profile picture">
                                     </a>
                                 </figure>
                             </div>
@@ -495,9 +495,63 @@
                         </div>
                         <div class="col-lg-2 col-md-3 d-none d-md-block">
                             <div class="profile-edit-panel">
-                                <button class="edit-btn"><a href="test.html" class="edit-href">edit profile</a></button>
+                                <button class="edit-profile-btn">edit profile</button>
                             </div>
                         </div>
+
+                        <!-- Background Overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Edit Profile Popup -->
+<div class="profile-popup" id="profile-popup">
+    <div class="popup-header">
+        <h3>Edit Your Profile</h3>
+        <button class="close-popup" id="close-popup">✖</button>
+    </div>
+    <div class="popup-body">
+        <form id="edit-profile-form">
+            <!-- Avatar -->
+            <div class="form-group">
+                <label for="avatar">Avatar</label>
+                <input type="file" id="avatar" name="avatar" disabled>
+                <span class="edit-icon" data-field="avatar">Edit✏️</span>
+            </div>
+
+            <!-- Name -->
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" value="John Doe" disabled>
+                <span class="edit-icon" data-field="name">Edit✏️</span>
+            </div>
+
+            <!-- Bio -->
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" name="bio" disabled>Lorem ipsum dolor sit amet...</textarea>
+                <span class="edit-icon" data-field="bio">Edit✏️</span>
+            </div>
+
+            <!-- Job -->
+            <div class="form-group">
+                <label for="job">Job</label>
+                <input type="text" id="job" name="job" value="Software Engineer" disabled>
+                <span class="edit-icon" data-field="job">Edit✏️</span>
+            </div>
+
+            <!-- Location -->
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" value="New York, USA" disabled>
+                <span class="edit-icon" data-field="location">Edit✏️</span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button type="button" class="save-btn" id="save-profile">Save All</button>
+            </div>
+        </form>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -762,15 +816,15 @@
                                 <div class="profile-thumb">
                                     <a href="#">
                                         <figure class="profile-thumb-middle">
-                                            <img src="assets/images/profile/profile-small-25.jpg" alt="profile picture">
+                                            <img src="assets/images/profile/profile-small-1.jpg" alt="profile picture">
                                         </figure>
                                     </a>
                                 </div>
                                 <!-- profile picture end -->
 
                                 <div class="posted-author">
-                                    <h6 class="author"><a href="profile.html">Erik Jhonson</a></h6>
-                                    <span class="post-time">35 min ago</span>
+                                    <h6 class="author"><a href="profile.html">merry watson</a></h6>
+                                    <span class="post-time">20 min ago</span>
                                 </div>
 
                                 <div class="post-settings-bar">
@@ -786,73 +840,64 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- post title start -->
-                            <div class="post-content">
-                                <p class="post-desc">
-                                    Many desktop publishing packages and web page editors now use Lorem Ipsum as their
-                                    default model text, and a search for 'lorem ipsum' will uncover many web sites still
-                                    in their infancy.
-                                </p>
-                                <div class="post-thumb-gallery img-gallery">
-                                    <div class="row g-0">
-                                        <div class="col-8">
-                                            <figure class="post-thumb">
-                                                <a class="gallery-selector" href="assets/images/post/post-2.jpg">
-                                                    <img src="assets/images/post/post-2.jpg" alt="post image">
-                                                </a>
-                                            </figure>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <figure class="post-thumb">
-                                                        <a class="gallery-selector" href="assets/images/post/post-3.jpg">
-                                                            <img src="assets/images/post/post-3.jpg" alt="post image">
-                                                        </a>
-                                                    </figure>
-                                                </div>
-                                                <div class="col-12">
-                                                    <figure class="post-thumb">
-                                                        <a class="gallery-selector" href="assets/images/post/post-4.jpg">
-                                                            <img src="assets/images/post/post-4.jpg" alt="post image">
-                                                        </a>
-                                                    </figure>
-                                                </div>
-                                                <div class="col-12">
-                                                    <figure class="post-thumb">
-                                                        <a class="gallery-selector" href="assets/images/post/post-5.jpg">
-                                                            <img src="assets/images/post/post-5.jpg" alt="post image">
-                                                        </a>
-                                                    </figure>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="post-meta">
-                                    <button class="post-meta-like">
-                                        <i class="bi bi-heart-beat"></i>
-                                        <span>You and 207 people like this</span>
-                                        <strong>207</strong>
-                                    </button>
-                                    <ul class="comment-share-meta">
-                                        <li>
-                                            <button class="post-comment">
-                                                <i class="bi bi-chat-bubble"></i>
-                                                <span>41</span>
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button class="post-share">
-                                                <i class="bi bi-share"></i>
-                                                <span>07</span>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- post status end -->
+                            <!-- Nội dung bài viết -->
+<div class="post-content">
+    <p class="post-desc">
+        Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+        default model text, and a search for 'lorem ipsum' will uncover many web sites still
+        in their infancy.
+    </p>
+    <div class="post-thumb-gallery">
+        <figure class="post-thumb img-popup">
+            <a href="assets/images/post/post-1.jpg">
+                <img src="assets/images/post/post-1.jpg" alt="post image">
+            </a>
+        </figure>
+    </div>
+    <div class="post-meta">
+        <button class="post-meta-like">
+            <i class="bi bi-heart-beat"></i>
+            <span>You and 201 people like this</span>
+            <strong>201</strong>
+        </button>
+        <ul class="comment-share-meta">
+            <li>
+                <!-- Nút Comment -->
+                <button class="post-comment" onclick="toggleComments('comments-1')">
+                    <i class="bi bi-chat-bubble"></i>
+                    <span>41</span>
+                </button>
+            </li>
+            <li>
+                <button class="post-share">
+                    <i class="bi bi-share"></i>
+                    <span>07</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Phần bình luận -->
+<div class="comment-section" id="comments-1" style="display:none;">
+    <h3>Bình luận</h3>
+    <div class="add-comment">
+        <img src="user-avatar.png" alt="Avatar" class="user-avatar">
+        <textarea id="comment-input-1" placeholder="Viết bình luận..."></textarea>
+        <button class="btn-submit" onclick="submitComment('comments-1', 'comment-input-1')">Đăng</button>
+    </div>
+    <div class="comments-list">
+        <!-- Bình luận mẫu -->
+        <div class="comment-item">
+            <img src="user-avatar.png" alt="Avatar" class="user-avatar">
+            <div class="comment-content">
+                <span class="comment-author">Dương Ngọc Thành</span>
+                <p class="comment-text">Bài viết rất hay, cảm ơn bạn đã chia sẻ!</p>
+                <span class="comment-time">5 phút trước</span>
+            </div>
+        </div>
+    </div>
+</div>
 
                         <!-- post status start -->
                         <div class="card">
@@ -1992,6 +2037,11 @@
     <script src="assets/js/plugins/isotope.pkgd.min.js"></script>
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/vendor/process.js"></script>
+    <script src="./assets/js/processEditProfile.js"></script> 
+
+
+
 
 </body>
 
