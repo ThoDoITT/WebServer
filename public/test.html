@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment Popup Demo</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+            color: #333;
+        }
+
+        .posts-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .post {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .post:last-child {
+            border-bottom: none;
+        }
+
+        .comment-btn {
+            background: #dc4734;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .comment-btn:hover {
+            background: #000102;
+        }
+
+        /* Background Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Popup Styling */
+        .comment-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 90%;
+            max-width: 500px;
+            background: #fff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .comment-popup.active {
+            display: flex;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #7d7d7d;
+            color: rgb(0, 0, 0);
+        }
+
+        .post-preview {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comments-list {
+            padding: 15px;
+        }
+
+        .comment {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .close-popup {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="posts-container">
+    <!-- Post Item -->
+    <div class="post" id="post-1">
+        <h3 class="post-title">This is a post title</h3>
+        <p class="post-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+        <button class="comment-btn" data-post-id="1">💬 Comment</button>
+    </div>
+
+    <!-- More Posts -->
+    <div class="post" id="post-2">
+        <h3 class="post-title">Another interesting post</h3>
+        <p class="post-content">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...</p>
+        <button class="comment-btn" data-post-id="2">💬 Comment</button>
+    </div>
+</div>
+
+<!-- Background Overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Comment Popup -->
+<div class="comment-popup" id="comment-popup">
+    <div class="popup-header">
+        <h3>Post & Comments</h3>
+        <button class="close-popup" id="close-popup">✖</button>
+    </div>
+    <div class="post-preview">
+        <!-- Post content will be injected here -->
+    </div>
+    <div class="comments-list">
+        <!-- Comments will be injected here -->
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const commentBtns = document.querySelectorAll(".comment-btn");
+        const popup = document.getElementById("comment-popup");
+        const overlay = document.getElementById("overlay");
+        const closePopup = document.getElementById("close-popup");
+        const postPreview = document.querySelector(".post-preview");
+        const commentsList = document.querySelector(".comments-list");
+
+        const mockComments = {
+            1: [
+                { id: 1, content: "Great post! Very insightful." },
+                { id: 2, content: "I totally agree with this!" },
+            ],
+            2: [
+                { id: 3, content: "This is amazing, thank you for sharing." },
+                { id: 4, content: "Looking forward to more posts like this." },
+            ],
+        };
+
+        // Function to open popup with content
+        function openPopup(postId) {
+            // Clear previous content
+            postPreview.innerHTML = "";
+            commentsList.innerHTML = "";
+
+            // Find the post content
+            const post = document.getElementById(`post-${postId}`);
+            const postTitle = post.querySelector(".post-title").textContent;
+            const postContent = post.querySelector(".post-content").textContent;
+
+            // Inject post content into popup
+            postPreview.innerHTML = `
+                <h3>${postTitle}</h3>
+                <p>${postContent}</p>
+            `;
+
+            // Inject comments into popup
+            const comments = mockComments[postId] || [];
+            comments.forEach((comment) => {
+                const commentItem = document.createElement("div");
+                commentItem.classList.add("comment");
+                commentItem.textContent = comment.content;
+                commentsList.appendChild(commentItem);
+            });
+
+            // Show overlay and popup
+            overlay.classList.add("active");
+            popup.classList.add("active");
+        }
+
+        // Event listeners for comment buttons
+        commentBtns.forEach((btn) => {
+            btn.addEventListener("click", function () {
+                const postId = btn.dataset.postId;
+                openPopup(postId);
+            });
+        });
+
+        // Event listener for closing popup
+        closePopup.addEventListener("click", function () {
+            popup.classList.remove("active");
+            overlay.classList.remove("active");
+        });
+
+        // Close popup if overlay is clicked
+        overlay.addEventListener("click", function () {
+            popup.classList.remove("active");
+            overlay.classList.remove("active");
+        });
+    });
+</script>
+
+</body>
+</html>
